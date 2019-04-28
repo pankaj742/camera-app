@@ -97,8 +97,7 @@ String formattedDate = now.toString();
     final String url = (await downloadUrl.ref.getDownloadURL());
     print('URL Is $url');
     //Map<String,String> data={_image.toString():url};
-    collectionReference.add({"url":url,"name":formattedDate}).then((DocumentReference id){
-      
+    collectionReference.add({"url":url,"name":formattedDate,"tag":"image"}).then((DocumentReference id){
       print("document added succefully");
     }).catchError((e)=>{print(e)});
 

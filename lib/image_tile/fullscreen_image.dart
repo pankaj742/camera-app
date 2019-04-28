@@ -19,7 +19,6 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
       end: Alignment.bottomRight);
 
   void delete(BuildContext context){
-    // 
     Navigator.of(context).push(MaterialPageRoute(
       builder:(BuildContext context){
         return Scaffold(
@@ -46,29 +45,29 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
         );
       }
     ));
-    // DocumentReference postRef;
-    //  Firestore.instance
-    // .collection('image')
-    // .where("url", isEqualTo: this.widget.imgPath)
-    // .getDocuments().then((data){
-    //   data.documents.forEach((doc) {
-    //   postRef = Firestore.instance.collection("image").document(doc.documentID);
-    //   postRef.get().then((datasnapshot){
-    //     if(datasnapshot.exists){
-    //       String storeEntry=datasnapshot.data["name"];
-    //       final StorageReference storageRef = FirebaseStorage.instance.ref().child(storeEntry);
-    //       storageRef.delete().whenComplete((){
-    //       print("deleted from storage");
-    //       postRef.delete().whenComplete((){
-    //       print("deleted sucefully from firebase");
-    //       Navigator.of(context).pop();
-    //       Navigator.of(context).pop();
-    //         }).catchError((e)=>{print(e)});
-    //       });
-    //     }else{
-    //       print("document does not exisist");
-    //     }
-    //   });
+    DocumentReference postRef;
+     Firestore.instance
+    .collection('image')
+    .where("url", isEqualTo: this.widget.imgPath)
+    .getDocuments().then((data){
+      data.documents.forEach((doc) {
+      postRef = Firestore.instance.collection("image").document(doc.documentID);
+      postRef.get().then((datasnapshot){
+        if(datasnapshot.exists){
+          String storeEntry=datasnapshot.data["name"];
+          final StorageReference storageRef = FirebaseStorage.instance.ref().child(storeEntry);
+          storageRef.delete().whenComplete((){
+          print("deleted from storage");
+          postRef.delete().whenComplete((){
+          print("deleted sucefully from firebase");
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+            }).catchError((e)=>{print(e)});
+          });
+        }else{
+          print("document does not exisist");
+        }
+      });
       
     
       // Firestore.instance.runTransaction((Transaction tx){
@@ -91,8 +90,8 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
       // });
 
 
-    // });
-    // });
+    });
+    });
     
   }
 
