@@ -52,6 +52,7 @@ class _WallScreenState extends State<WallScreen> {
         wallpapersList = datasnapshot.documents;
       });
     });
+    subscription?.cancel();
 
     // _currentScreen();
   }

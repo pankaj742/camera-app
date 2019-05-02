@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'results.dart';
 //void main() => runApp(MyApp());
 
 // class MyApp extends StatelessWidget {
@@ -36,6 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   File _image;
   //Image _loadingImage;
   String _text="please select an image";
+  DocumentReference lastDocument;
+  String _url;
 Future<void> getImage() async{
       File res=await ImagePicker.pickImage(source: ImageSource.camera);
       setState(() {
@@ -98,13 +100,15 @@ String formattedDate = now.toString();
     print('URL Is $url');
     //Map<String,String> data={_image.toString():url};
     collectionReference.add({"url":url,"name":formattedDate,"tag":"image"}).then((DocumentReference id){
+      lastDocument=id;
       print("document added succefully");
     }).catchError((e)=>{print(e)});
 
     Navigator.of(context).pop();
     setState(() {
      _text="image send succesfully";
-     _image=null; 
+     _image=null;
+     _url=url;
     });
   //   setState(() {
   //  _text="image send sucefully";
@@ -153,6 +157,13 @@ setState(() {
     _text="Image compressed sucessfully\nclick on sent to send it";
 });
 }
+void getResult(){
+  Navigator.of(context).push(MaterialPageRoute(
+    builder:(BuildContext context){
+      return ResultPage(lastDocument);
+    }
+  ));
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,7 +182,12 @@ setState(() {
                 Container(
                   color: Colors.transparent,
                   alignment: Alignment.center,
-                  child: _image == null?Text(_text): Container(
+                  child: _image == null?Row(children: <Widget>[Text(_text),
+                  IconButton(
+                    icon: Icon(Icons.cloud_download),
+                    iconSize: 40,
+                    onPressed: getResult,),
+                  ]): Container(
                     color: Colors.transparent,
                     child:Image.file(_image)),
                     //width: 400,
