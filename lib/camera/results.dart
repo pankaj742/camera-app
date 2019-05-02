@@ -38,13 +38,17 @@ class _ResultPageState extends State<ResultPage> {
     });
 
   }
+  void initState(){
+    super.initState();
+    getResult();
 
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
           body: ListView(
             children: [Container(
-          child: getResult() != null?Image.network(stateUrl):Text("waiting for data to load"),
+          child: stateUrl != null?Image.network(stateUrl):Text("waiting for data to load"),
         ),
             ]),
     );
