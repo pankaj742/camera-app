@@ -182,7 +182,9 @@ void getResult(){
                 Container(
                   color: Colors.transparent,
                   alignment: Alignment.center,
-                  child: _image == null?Row(children: <Widget>[Text(_text),
+                  child: _image == null?Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[Text(_text),
                   IconButton(
                     icon: Icon(Icons.cloud_download),
                     iconSize: 40,

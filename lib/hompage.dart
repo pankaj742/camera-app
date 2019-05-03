@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_app/newpage.dart';
 import "camera/camera_page.dart";
+import "message.dart";
 
 class HomePage extends StatefulWidget {
   static bool signedIn=false;
@@ -13,10 +14,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  openMessage(){
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context){
+        return Material(
+          // color: Colors.green[200],
+          child: Message(),
+        );
+      } 
+      ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        
         title: Text("Image Sender"),
         backgroundColor: Colors.green[400],
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
@@ -73,61 +87,81 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Material(
-        child: ListView(
-                  children:[ 
-            Column(
-            children: <Widget>[
-              Container(
-                width: 290,
-                height: 410,
-                child: Image.asset("assets/hompage.png"),
-              ),
-              Container(
-                height: 65,
-              ),
-              HomePage.user!=null? Container(
-                color: Colors.green[200],
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Material(
-                        color: Colors.yellowAccent[100],
-                        borderRadius: BorderRadius.circular(10),
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Container(
-                            //height: 40,
-                            //width: 40,
-                            child: InkWell(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                highlightColor:
-                                    Colors.green[400], //Colors.greenAccent[300],
-                                splashColor: Colors.greenAccent[600],
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => BackdropPage(),
-                                  ));
-                                },
-                                child: Row(children: <Widget>[
-                                  Text("go to camera page",
-                                      style: Theme.of(context).textTheme.button),
-                                  IconButton(icon: Icon(Icons.home), onPressed: null),
-                                ])),
-                          ),
-                        ),
-                      ),
-                    ],
+        child: Stack(
+          children: <Widget>[
+            
+            ListView(
+                      children:[ 
+                Column(
+                children: <Widget>[
+                  Container(
+                    width: 290,
+                    height: 410,
+                    child: Image.asset("assets/hompage.png"),
                   ),
-                ),
-                //Text("Please Sign in",style: Theme.of(context).textTheme.display1,),
-              ):Container(),
-            ],
-          ),
-                  ]),
+                  Padding(
+                    padding: EdgeInsets.all(30),
+                  ),
+                  HomePage.user!=null? Container(
+                    color: Colors.green[200],
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Material(
+                            color: Colors.yellowAccent[100],
+                            borderRadius: BorderRadius.circular(10),
+                            child: Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Container(
+                                //height: 40,
+                                //width: 40,
+                                child: InkWell(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    highlightColor:
+                                        Colors.green[400], //Colors.greenAccent[300],
+                                    splashColor: Colors.greenAccent[600],
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (BuildContext context) => BackdropPage(),
+                                      ));
+                                    },
+                                    child: Row(children: <Widget>[
+                                      Text("go to camera page",
+                                          style: Theme.of(context).textTheme.button),
+                                      IconButton(icon: Icon(Icons.home), onPressed: null),
+                                    ])),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    //Text("Please Sign in",style: Theme.of(context).textTheme.display1,),
+                  ):Container(),
+                ],
+              ),
+              
+                      ]),
+                      Positioned(
+              top: 0,
+              right: 3,
+              child: Container(
+                    height: 65,
+                    child: FloatingActionButton(
+                      child: Icon(
+                        Icons.message,
+                        size: 30,
+                      ),
+                      onPressed: openMessage,
+                    ),
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
