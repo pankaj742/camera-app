@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context){
         return Material(
           // color: Colors.green[200],
-          child: Message(),
+          child: Message((HomePage.user != null?HomePage.user.displayName:"pankaj")),
         );
       } 
       ));

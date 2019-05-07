@@ -5,6 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Message extends StatefulWidget {
+  static String user;
+  Message(String _user){
+    user=_user;
+  }
   @override
   _MessageState createState() => _MessageState();
 }
@@ -14,7 +18,7 @@ class _MessageState extends State<Message> {
   final myController = TextEditingController();
   FocusNode myFocusNode;
   CollectionReference collectionReference=Firestore.instance.collection("messages");
-  List<DocumentSnapshot> messageList;
+  List<Map<dynamic,dynamic>> messageList;
   StreamSubscription<QuerySnapshot> subscription;
   int _index=0;
 
@@ -22,9 +26,16 @@ class _MessageState extends State<Message> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    subscription = collectionReference.snapshots().listen((datasnapshot) {
+    subscription = collectionReference.where("user",isEqualTo:Message.user).snapshots().listen((datasnapshot) {
+      List<DocumentSnapshot>docs = datasnapshot.documents;
+      // print(docs[0].data["conversation"]);
+      List<Map<dynamic,dynamic>> conv;
+      if(docs !=null){
+         conv= (docs[0].data["conversation"]).cast<Map<dynamic,dynamic>>();
+      }
+      print("conversation"+conv.toString());
       setState(() {
-        messageList = datasnapshot.documents;
+        messageList = conv;
       });
     });
     myController.addListener(_getText);
@@ -47,17 +58,74 @@ class _MessageState extends State<Message> {
   // });
   }
   sendMessage(){
-    collectionReference.add({
-      "role": "seller",
-      "message":myController.text 
-    });
-    print("message sent");
-    setState(() {
-      myController.clear();
-      myFocusNode.unfocus();
-      inputPosition=420.0;
-      _index=0;
-    });
+    collectionReference.where("user",isEqualTo:Message.user).getDocuments().then(
+        (queryShot){
+          print(queryShot.documents);
+            // print(queryShot.documents[0]);
+            DocumentSnapshot doc;
+            if(queryShot.documents.length !=0){
+                doc=queryShot.documents[0];
+            }
+            if(doc == null){
+                var data={
+                    "user": Message.user,
+                    "conversation":new List()
+                };
+                data["conversation"]=[{
+                    "role": "seller",
+                    "message": myController.text
+                }];
+                print(data);
+                collectionReference.add(data).then((doc){
+                    print("document added new user "+doc.documentID);
+                    setState(() {
+                      myController.clear();
+                      myFocusNode.unfocus();
+                      inputPosition=420.0;
+                      _index=0;
+                    });
+                    // alert("please click on send button again");
+                    return;
+                });
+               
+            }
+            List<Map<dynamic,dynamic>> msg=List.from(doc.data["conversation"].cast<Map<dynamic,dynamic>>());
+            msg.add({
+                "role":"seller",
+                "message":myController.text
+            });
+            collectionReference.document(doc.documentID).updateData({
+                "conversation":msg
+            })
+            .whenComplete((){
+                print("Document successfully updated!");
+                 setState(() {
+                  myController.clear();
+                  myFocusNode.unfocus();
+                  inputPosition=420.0;
+                  _index=0;
+                });
+            })
+            .catchError((error) {
+                // The document probably doesn't exist.
+                print("Error updating document: "+ error);
+            });
+        }
+    );
+
+    // collectionReference.add({
+    //   "role": "seller",
+    //   "message":myController.text,
+    //   "user":Message.user,
+    //   "conver"
+    // });
+    // print("message sent");
+    // setState(() {
+    //   myController.clear();
+    //   myFocusNode.unfocus();
+    //   inputPosition=420.0;
+    //   _index=0;
+    // });
     
   }
   @override
@@ -85,10 +153,12 @@ class _MessageState extends State<Message> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20)
                       ),
-                      child: messageList != null?ListView.builder(
+                      child: messageList != null && messageList.length >0?ListView.builder(
                         itemCount: messageList.length,
                         itemBuilder: (context,i){
-                          String role=messageList[i].data["role"];
+                          
+                          String role=messageList[i]["role"];
+                          print(role);
                           if( role == "seller"){
                              return  Container(
                               margin: EdgeInsets.fromLTRB(100, 2, 8, 2),
@@ -105,7 +175,7 @@ class _MessageState extends State<Message> {
                                   bottom: BorderSide(color: Colors.black)
                                 )
                               ),
-                              child: Text(messageList[i].data["message"],
+                              child: Text(messageList[i]["message"],
                               textAlign: TextAlign.center,
                               ),
                             );
@@ -125,7 +195,7 @@ class _MessageState extends State<Message> {
                                   bottom: BorderSide(color: Colors.black)
                                 )
                               ),
-                              child: Text(messageList[i].data["message"],
+                              child: Text(messageList[i]["message"],
                               textAlign: TextAlign.center,
                               ),
                             );
