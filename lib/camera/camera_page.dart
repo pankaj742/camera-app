@@ -46,7 +46,7 @@ class _BackdropPageState extends State<BackdropPage>
       appBar: new AppBar(
         title: new Text("Image Sender"),
         elevation: 0.0,
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color.fromRGBO(0, 188, 212,1.0),
         leading: new IconButton(
           onPressed: () {
             controller.fling(velocity: isPanelVisible ? -1.0 : 1.0);

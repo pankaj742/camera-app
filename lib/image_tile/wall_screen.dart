@@ -1,4 +1,5 @@
 
+import 'package:camera_app/hompage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'fullscreen_image.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _WallScreenState extends State<WallScreen> {
   void initState() {
     // TODO implement initState
     super.initState();
-    subscription = collectionReference.snapshots().listen((datasnapshot) {
+    subscription = collectionReference.where("user",isEqualTo: HomePage.user.displayName).snapshots().listen((datasnapshot) {
       setState(() {
         wallpapersList = datasnapshot.documents;
       });
@@ -60,7 +61,7 @@ class _WallScreenState extends State<WallScreen> {
   void didUpdateWidget(WallScreen oldWidget) {
     // TODO implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    subscription = collectionReference.snapshots().listen((datasnapshot) {
+    subscription = collectionReference.where("user",isEqualTo: HomePage.user.displayName).snapshots().listen((datasnapshot) {
       setState(() {
         wallpapersList = datasnapshot.documents;
       });

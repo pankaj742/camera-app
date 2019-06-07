@@ -1,3 +1,4 @@
+import 'package:camera_app/camera/results.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,35 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     
   }
 
+  void getResult(){
+    DocumentReference lastDocument;
+     Firestore.instance
+    .collection('image')
+    .where("url", isEqualTo: this.widget.imgPath)
+    .getDocuments().then((data){
+      data.documents.forEach((doc) {
+      lastDocument = Firestore.instance.collection("image").document(doc.documentID);
+      Navigator.of(context).push(MaterialPageRoute(
+    builder:(BuildContext context){
+      return ResultPage(lastDocument);
+    }
+  ));
+      });
+    });
+  if(lastDocument ==null){
+  // Scaffold.of(context).showSnackBar(new SnackBar(
+  //     content: new Text("please select image"),
+  //   ));
+    print("please select image");
+    return;
+  }
+  Navigator.of(context).push(MaterialPageRoute(
+    builder:(BuildContext context){
+      return ResultPage(lastDocument);
+    }
+  ));
+}
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -138,7 +168,15 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                       iconSize: 40,
                       onPressed: ()=>delete(context),
                     ),
-              )
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(100, 0, 0, 0),
+                alignment: Alignment.bottomCenter,
+                child: IconButton(
+                    icon: Icon(Icons.cloud_download),
+                    iconSize: 40,
+                    onPressed: getResult,)
+              ),
             ],
           ),
         ),

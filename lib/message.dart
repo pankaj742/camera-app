@@ -139,18 +139,18 @@ class _MessageState extends State<Message> {
                 children: [Container(
               // width: 400,
               height: 600,
-              color: Colors.green[200],
+              color: Color.fromRGBO(0, 150, 136, 1),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
                     child: Container(
-                      width: 300,
+                      width: 400,
                       height: 450,
                       // color: Colors.white,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color.fromRGBO(224, 255, 220, 1),
                         borderRadius: BorderRadius.circular(20)
                       ),
                       child: messageList != null && messageList.length >0?ListView.builder(
@@ -161,13 +161,14 @@ class _MessageState extends State<Message> {
                           print(role);
                           if( role == "seller"){
                              return  Container(
-                              margin: EdgeInsets.fromLTRB(100, 2, 8, 2),
+                              margin: EdgeInsets.fromLTRB(150, 2, 8, 2),
                               // width: 20,
                               // height: 50,
                               constraints: BoxConstraints(minHeight: 50),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Colors.teal[100],
+                                // color: Colors.teal[100],
+                                color: Colors.green[300],
                                 border: Border(
                                   top: BorderSide(color: Colors.black),
                                   left: BorderSide(color: Colors.black),
@@ -175,19 +176,27 @@ class _MessageState extends State<Message> {
                                   bottom: BorderSide(color: Colors.black)
                                 )
                               ),
-                              child: Text(messageList[i]["message"],
-                              textAlign: TextAlign.center,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(messageList[i]["message"],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                                ),
                               ),
                             );
                           }else{
                             return  Container(
-                              margin: EdgeInsets.fromLTRB(8, 2, 100, 2),
+                              margin: EdgeInsets.fromLTRB(8, 2, 150, 2),
                               // width: 20,
                               // height: 50,
                               constraints: BoxConstraints(minHeight: 50),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Colors.lightGreenAccent[100],
+                                color: Colors.white54,
+                                // color: Color.fromRGBO(205, 220, 57, 1),
+                                // color: Color.fromRGBO(255, 228, 181, 1),
                                 border: Border(
                                   top: BorderSide(color: Colors.black),
                                   left: BorderSide(color: Colors.black),
@@ -195,8 +204,14 @@ class _MessageState extends State<Message> {
                                   bottom: BorderSide(color: Colors.black)
                                 )
                               ),
-                              child: Text(messageList[i]["message"],
-                              textAlign: TextAlign.center,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(messageList[i]["message"],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                                ),
                               ),
                             );
                           }
@@ -205,18 +220,22 @@ class _MessageState extends State<Message> {
                       ):null,
                     ),
                   ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: IconButton(
-             icon: Icon(Icons.message),
-             iconSize: 60,
-             onPressed: (){
-               setState(() {
-                _index=1; 
-               });
-             },
-             ),
-                   ),
+          Container(
+            height: 100,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+                child: IconButton(
+                 icon: Icon(Icons.message,size:60),
+                 iconSize: 60,
+                 onPressed: (){
+                   setState(() {
+                    _index=1; 
+                   });
+                 },
+                //  ),
+              ),
+                     ),
+          ),
                 ],
               ),
             ),
@@ -281,9 +300,12 @@ class _MessageState extends State<Message> {
                                       ),
                                     ),
                             ),
-                            FloatingActionButton(
-                              child: Icon(Icons.send),
-                              onPressed: sendMessage,
+                            Container(
+                              margin: EdgeInsets.fromLTRB(5, 0, 0, 10),
+                              child: FloatingActionButton(
+                                child: Icon(Icons.send,),
+                                onPressed: sendMessage,
+                              ),
                             ),
                           ],
                         ),

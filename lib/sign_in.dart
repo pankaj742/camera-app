@@ -108,7 +108,11 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
             //Text(_string,textAlign: TextAlign.center,),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: Text(_string,textAlign: TextAlign.center,)
+              child: Text(_string,
+              style: TextStyle(
+                fontSize: 18
+              )
+              ,textAlign: TextAlign.center,)
             ),
             Container(
               height: 400,
@@ -125,7 +129,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
                       HomePage.user.photoUrl),
                   ),
                 )):
-              Image.asset("assets/signInPage.png"),
+              Image.asset("assets/signInPage.jpg"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

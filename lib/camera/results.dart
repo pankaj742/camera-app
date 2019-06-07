@@ -48,7 +48,24 @@ class _ResultPageState extends State<ResultPage> {
     return Scaffold(
           body: ListView(
             children: [Container(
-          child: stateUrl != null?Image.network(stateUrl):Text("waiting for data to load"),
+          child: stateUrl != null?Image.network(stateUrl):
+          Stack(children: <Widget>[
+            Container(
+              width: 350,
+              height: 600,
+              margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+              alignment: Alignment.center,
+              decoration: new BoxDecoration(
+                  border: new Border.all(color: Colors.pinkAccent)
+                ),
+              child: 
+                  // BoxFit(child: Image.asset("assets/loading3.gif")),
+                  Text("waiting for data to load"),
+            ),
+          Container(
+            margin: EdgeInsets.fromLTRB(40,0,0,0),
+            child: Image.asset("assets/loading3.gif")),
+          ],)
         ),
             ]),
     );

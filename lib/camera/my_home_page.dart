@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera_app/camera/compress.dart';
+import 'package:camera_app/hompage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _text="please select an image";
   DocumentReference lastDocument;
   String _url;
+  String user=HomePage.user.displayName;
 Future<void> getImage() async{
       File res=await ImagePicker.pickImage(source: ImageSource.camera);
       setState(() {
@@ -99,17 +101,19 @@ String formattedDate = now.toString();
     final String url = (await downloadUrl.ref.getDownloadURL());
     print('URL Is $url');
     //Map<String,String> data={_image.toString():url};
-    collectionReference.add({"url":url,"name":formattedDate,"tag":"image"}).then((DocumentReference id){
+    print(user);
+    collectionReference.add({"url":url,"name":formattedDate,"tag":"image","user":user}).then((DocumentReference id){
       lastDocument=id;
       print("document added succefully");
-    }).catchError((e)=>{print(e)});
-
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
     setState(() {
      _text="image send succesfully";
      _image=null;
      _url=url;
     });
+    }).catchError((e)=>{print(e)});
+
+    
   //   setState(() {
   //  _text="image send sucefully";
   //  _loadingImage=null;
@@ -158,6 +162,12 @@ setState(() {
 });
 }
 void getResult(){
+  if(lastDocument ==null){
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text("please select image"),
+    ));
+    return;
+  }
   Navigator.of(context).push(MaterialPageRoute(
     builder:(BuildContext context){
       return ResultPage(lastDocument);

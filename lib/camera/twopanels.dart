@@ -31,12 +31,12 @@ class _TwoPanelsState extends State<TwoPanels> {
     final ThemeData theme = Theme.of(context);
 
     return new Container(
-      color: Colors.blueGrey,
+      color: Colors.pink,
       child: new Stack(
         children: <Widget>[
           new Container(
             //color: theme.primaryColor,
-            color: Colors.blueGrey,
+            // color: Colors.pink,
             child: new Center(
               child: WallScreen()//new Text(
               //   "Back Panel",
@@ -55,7 +55,14 @@ class _TwoPanelsState extends State<TwoPanels> {
               child: new Column(
                   children: <Widget>[
                     new Container(
-                      color: Colors.transparent,
+                      
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0)
+                        ),
+                        color: Colors.green[400]
+                      ),
                       height: header_height,
                       child: new Center(
                         child: new Text(
