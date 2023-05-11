@@ -1,6 +1,10 @@
 # camera_app
 
-A new Flutter project.
+* this is the flutter project which i had created for my final year project.
+* app has features of capturing and uploading images for classification to our image classification server.
+* app has sign/in sign out features.
+* this app has multi user real time chat system.
+* includes code for some image compression also.
 
 ## Getting Started
 
